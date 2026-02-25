@@ -12,18 +12,16 @@ Check if `.tasks/` directory exists in the project root.
 
 **If `.tasks/` does NOT exist** → New Project Mode:
 1. Create `.tasks/` directory.
-2. Read `memory.md` (at instruments root) if it exists — load persistent user preferences.
-3. Proceed to **Phase 1: Decomposition**.
+2. Proceed to **Phase 1: Decomposition**.
 
 **If `.tasks/` exists** → Resume Mode:
-1. Read `memory.md` (at instruments root) if it exists — load persistent user preferences.
-2. Read `.tasks/plan.md`.
-3. Check the `## Phase` field:
+1. Read `.tasks/plan.md`.
+2. Check the `## Phase` field:
    - `decomposition` → Resume Phase 1. Check if task files exist; if not, continue creating them.
    - `execution` → Resume Phase 2. Find tasks that are `in_progress` or `pending` and continue.
    - `evaluation` → Resume Phase 3. Re-run verification.
    - `completed` → Report to user that the project is already done.
-4. For any task with status `in_progress`: read its Log section.
+3. For any task with status `in_progress`: read its Log section.
    - If meaningful progress is logged → create a continuation task from the last checkpoint.
    - If no meaningful progress → reset status to `pending`.
 
@@ -297,7 +295,6 @@ Always update status in **two places**:
 ```
 {instruments-root}/             ← instrument framework (installed once, location-independent)
   README.md                     ← instrument registry
-  memory.md                     ← persistent user preferences (shared across instruments)
   architect/
     PROTOCOL.md
     DEVELOPER.md
@@ -321,37 +318,3 @@ The `## History` section in `plan.md` is **append-only**. Format:
 ```
 - [YYYY-MM-DD HH:MM] Event description
 ```
-
----
-
-## 7. Persistent Memory — `memory.md`
-
-The file `memory.md` (at instruments root) stores persistent user context that survives across sessions and projects. It lives at the instrument framework level (not inside any project) because it is shared across all instruments and all projects.
-
-### 7.1 What to Persist
-
-Capture any information the user shares that could be useful in future sessions:
-
-- **User preferences**: coding style, preferred frameworks, language, formatting conventions.
-- **Credentials & tokens**: GitHub tokens, API keys, service account names (store identifiers, not raw secrets — for raw secrets, note the location of the `.env` or vault).
-- **Environment details**: OS, shell, editor, default branches, CI/CD setup.
-- **Habits & conventions**: commit message style, PR workflow, branch naming, test preferences.
-- **Project-specific notes**: architecture decisions, known tech debt, gotchas.
-
-### 7.2 When to Update
-
-Update `memory.md` during interaction when:
-- The user explicitly tells you a preference or convention.
-- The user provides a credential or token.
-- You discover a project convention by observing the codebase (ask before recording).
-- The user corrects your behavior — record the correction as a preference.
-
-### 7.3 Format
-
-Entries are organized by category and are append/update (never delete unless the user asks). See the template structure in the file.
-
-### 7.4 Usage
-
-- On every bootstrap (Section 1), read `memory.md` first.
-- Apply stored preferences to all decisions (naming, formatting, tool choices, etc.).
-- When in doubt about a preference, check `memory.md` before asking the user.

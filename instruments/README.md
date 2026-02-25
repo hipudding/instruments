@@ -15,12 +15,6 @@ A modular collection of agent protocols. Each instrument defines a specialized w
 |------------|-----------|-------------|------------|
 | Architect  | `architect/` | Decomposes complex tasks into sub-tasks, coordinates execution (including parallel dispatch of independent tasks), tracks progress via file-based state. | User says "architect mode", or project has `.tasks/plan.md` |
 
-## Shared Resources
-
-| File | Purpose |
-|------|---------|
-| `memory.md` | Persistent user preferences, credentials, habits — shared across all instruments. Loaded on every session start. |
-
 ## Adding a New Instrument
 
 1. Create a new directory: `{instruments-root}/{name}/`
@@ -32,5 +26,4 @@ A modular collection of agent protocols. Each instrument defines a specialized w
 
 - Each instrument is self-contained in its own directory.
 - `PROTOCOL.md` is the entry point for every instrument.
-- `memory.md` at the top level is shared — all instruments read and write to it.
 - Instruments should not depend on each other unless explicitly documented.

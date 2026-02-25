@@ -26,7 +26,7 @@ IMPORTANT: You MUST follow the steps below at the start of EVERY session, BEFORE
 1. Check if `~/.claude/instruments/README.md` exists.
 2. If it exists:
    a. Read `~/.claude/instruments/README.md` — discover available instruments.
-   b. Read `~/.claude/instruments/memory.md` if it exists — load persistent user preferences. Apply these preferences throughout the session.
+   b. Read `~/.claude/memory.md` if it exists — load persistent user preferences. Apply these preferences throughout the session.
    c. Determine which instrument to activate:
       - If `.tasks/plan.md` exists → MUST activate the **Architect** instrument: read `~/.claude/instruments/architect/PROTOCOL.md` and enter Resume mode.
       - If the user explicitly requests a mode (e.g. "architect mode") → activate the corresponding instrument.
@@ -54,9 +54,9 @@ Start a Claude Code session in any project:
 ```
 ~/.claude/
   CLAUDE.md                    # Global config (points to instruments)
+  memory.md                    # Persistent user preferences (not in repo)
   instruments/                 # Installed once, available to all projects
     README.md                  #   Instrument registry (agent entry point)
-    memory.md                  #   Persistent user preferences
     architect/                 #   Architect instrument
       PROTOCOL.md              #     Main protocol
       DEVELOPER.md             #     Sub-agent protocol
@@ -76,7 +76,7 @@ Start a Claude Code session in any project:
 ## Framework Features
 
 - **Global install** — Install once in `~/.claude/instruments/`, use in any project. No per-project setup needed.
-- **Persistent memory** — The agent records your preferences, conventions, and environment details in `~/.claude/instruments/memory.md`, shared across all instruments and all projects.
+- **Persistent memory** — The agent records your preferences, conventions, and environment details in `~/.claude/memory.md`, separate from instrument code and shared across all projects.
 - **Extensible** — Add your own instruments by dropping a `PROTOCOL.md` into a new directory and registering it.
 
 ## Instruments
