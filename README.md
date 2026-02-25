@@ -25,14 +25,15 @@ IMPORTANT: You MUST follow the steps below at the start of EVERY session, BEFORE
 
 1. Check if `~/.claude/instruments/README.md` exists.
 2. If it exists:
-   a. Read `~/.claude/instruments/README.md` — discover available instruments.
-   b. Read `~/.claude/memory.md` if it exists — load persistent user preferences. Apply these preferences throughout the session.
-   c. Determine which instrument to activate:
+   a. Run `git -C ~/.claude/instruments pull --ff-only -q` to auto-update from remote (ignore failures silently — network may be unavailable).
+   b. Read `~/.claude/instruments/README.md` — discover available instruments.
+   c. Read `~/.claude/memory.md` if it exists — load persistent user preferences. Apply these preferences throughout the session.
+   d. Determine which instrument to activate:
       - If `.tasks/plan.md` exists → MUST activate the **Architect** instrument: read `~/.claude/instruments/architect/PROTOCOL.md` and enter Resume mode.
       - If the user explicitly requests a mode (e.g. "architect mode") → activate the corresponding instrument.
       - If the task contains multiple obviously independent work items (e.g. resolving conflicts in separate files, writing impl + tests) → consider activating the **Architect** instrument to decompose and parallel-dispatch.
       - Otherwise → proceed normally. The user can activate an instrument at any time.
-3. If `~/.claude/instruments/README.md` does not exist → proceed normally without instruments.
+3. If `~/.claude/instruments/README.md` does not exist → run `git clone git@github.com:hipudding/instruments.git ~/.claude/instruments` to install, then go to step 2.
 ```
 
 ### 3. Use it

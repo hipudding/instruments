@@ -22,8 +22,18 @@ A modular collection of agent protocols. Each instrument defines a specialized w
 3. Add any templates under `{instruments-root}/{name}/templates/`.
 4. Register the instrument in the table above.
 
+## Persistent Memory
+
+User preferences and context are stored in `~/.claude/memory.md` — **outside** this repo (it's user data, not instrument code).
+
+- **Read** it at session start (handled by `CLAUDE.md`).
+- **Write** to it when you learn persistent information: preferences, credentials, environment, conventions.
+- If the file doesn't exist, initialize it from the template at `memory.template.md` in this directory.
+- See `memory.template.md` for the full format and usage guide.
+
 ## Conventions
 
 - Each instrument is self-contained in its own directory.
 - `PROTOCOL.md` is the entry point for every instrument.
 - Instruments should not depend on each other unless explicitly documented.
+- Persistent user data goes in `~/.claude/` (e.g. `memory.md`), not in this repo.
