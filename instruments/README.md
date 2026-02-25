@@ -1,47 +1,6 @@
 # Instrument Framework
 
-A modular collection of agent protocols for Claude Code. Each instrument defines a specialized working mode with its own protocol, templates, and workflow.
-
-## Setup
-
-### 1. Add instruments to your project
-
-Copy or symlink the `instruments/` directory into your project root:
-
-```bash
-# Option A: clone directly into your project
-git clone git@github.com:hipudding/instruments.git
-
-# Option B: add as a git submodule
-git submodule add git@github.com:hipudding/instruments.git
-```
-
-### 2. Configure `~/.claude/CLAUDE.md`
-
-Add the following to your global `~/.claude/CLAUDE.md` (create the file if it doesn't exist):
-
-```markdown
-# Global Instructions
-
-## Instrument Framework
-
-IMPORTANT: You MUST follow the steps below at the start of EVERY session, BEFORE responding to the user's first message.
-
-1. Check if `instruments/README.md` exists in the current project root.
-2. If it exists:
-   a. Read `instruments/README.md` — discover available instruments.
-   b. Read `instruments/memory.md` if it exists — load persistent user preferences. Apply these preferences throughout the session.
-   c. Determine which instrument to activate:
-      - If `.tasks/plan.md` exists → MUST activate the **Architect** instrument: read `instruments/architect/PROTOCOL.md` and enter Resume mode.
-      - If the user explicitly requests a mode (e.g. "architect mode") → activate the corresponding instrument.
-      - If the task contains multiple obviously independent work items (e.g. resolving conflicts in separate files, writing impl + tests) → consider activating the **Architect** instrument to decompose and parallel-dispatch.
-      - Otherwise → proceed normally. The user can activate an instrument at any time.
-3. If `instruments/README.md` does not exist → proceed normally without instruments.
-```
-
-### 3. Done
-
-Start a new Claude Code session in your project. The agent will automatically detect `instruments/README.md` and load the framework.
+A modular collection of agent protocols. Each instrument defines a specialized working mode with its own protocol, templates, and workflow.
 
 ## How It Works
 
