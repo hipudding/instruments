@@ -12,11 +12,11 @@ Check if `.tasks/` directory exists in the project root.
 
 **If `.tasks/` does NOT exist** → New Project Mode:
 1. Create `.tasks/` directory.
-2. Read `instruments/memory.md` if it exists — load persistent user preferences.
+2. Read `~/.claude/instruments/memory.md` if it exists — load persistent user preferences.
 3. Proceed to **Phase 1: Decomposition**.
 
 **If `.tasks/` exists** → Resume Mode:
-1. Read `instruments/memory.md` if it exists — load persistent user preferences.
+1. Read `~/.claude/instruments/memory.md` if it exists — load persistent user preferences.
 2. Read `.tasks/plan.md`.
 3. Check the `## Phase` field:
    - `decomposition` → Resume Phase 1. Check if task files exist; if not, continue creating them.
@@ -51,14 +51,14 @@ Identify dependencies between tasks. Tasks without mutual dependencies can run i
 
 ### 2.3 Write the Plan
 
-1. Create `.tasks/plan.md` using the template (`instruments/architect/templates/plan.md`). Fill in:
+1. Create `.tasks/plan.md` using the template (`~/.claude/instruments/architect/templates/plan.md`). Fill in:
    - Objective, Context, Deliverables
    - Task table with all sub-tasks, dependencies, and initial status `pending`
    - Overall acceptance criteria
    - Set Phase to `decomposition`
    - Set Plan Version to `v1`
 2. Create a versioned task directory: `.tasks/v1-{plan-slug}/` (e.g. `.tasks/v1-setup-auth/`).
-3. For each sub-task, create `.tasks/v1-{plan-slug}/NN-slug.md` using the template (`instruments/architect/templates/task.md`). Fill in:
+3. For each sub-task, create `.tasks/v1-{plan-slug}/NN-slug.md` using the template (`~/.claude/instruments/architect/templates/task.md`). Fill in:
    - Objective, Context (enough for a fresh-context agent)
    - Inputs (exact file paths, references to other tasks' outputs)
    - Steps (concrete, specific, with exact paths and commands)
@@ -152,7 +152,7 @@ For each ready task:
 2. Spawn a developer sub-agent with this prompt:
 
 ```
-Read the developer protocol at `{project-root}/instruments/architect/DEVELOPER.md`.
+Read the developer protocol at `~/.claude/instruments/architect/DEVELOPER.md`.
 Then read your task file at `{project-root}/.tasks/{version-dir}/NN-slug.md`.
 Execute the task as described. Record your work in the task file's Log section.
 Update the Status field when done.
@@ -295,20 +295,22 @@ Always update status in **two places**:
 ### Directory Structure
 
 ```
+~/.claude/instruments/       ← global instrument framework (installed once)
+  README.md                  ← instrument registry
+  memory.md                  ← persistent user preferences (shared across instruments)
+  architect/
+    PROTOCOL.md
+    DEVELOPER.md
+    templates/
+
 {project-root}/
-  instruments/              ← instrument framework (protocols, templates, shared memory)
-    memory.md              ← persistent user preferences & context (shared across instruments)
-    architect/
-      PROTOCOL.md
-      DEVELOPER.md
-      templates/
-  .tasks/                  ← runtime state (created per project, gitignore-able)
-    plan.md                ← current plan (always up-to-date)
-    plan-v1.md             ← archived plan from version 1 (created on re-plan)
-    v1-setup-auth/         ← task files for plan v1
+  .tasks/                    ← runtime state (per project, gitignore-able)
+    plan.md                  ← current plan (always up-to-date)
+    plan-v1.md               ← archived plan from version 1 (created on re-plan)
+    v1-setup-auth/           ← task files for plan v1
       01-init-db.md
       02-create-models.md
-    v2-setup-auth/         ← task files for plan v2 (after re-plan)
+    v2-setup-auth/           ← task files for plan v2 (after re-plan)
       03-add-oauth.md
 ```
 
@@ -322,9 +324,9 @@ The `## History` section in `plan.md` is **append-only**. Format:
 
 ---
 
-## 7. Persistent Memory — `instruments/memory.md`
+## 7. Persistent Memory — `~/.claude/instruments/memory.md`
 
-The file `instruments/memory.md` stores persistent user context that survives across sessions. It lives at the instrument framework level (not inside `.tasks/`) because it is shared across all instruments and should persist independently of any specific task plan.
+The file `~/.claude/instruments/memory.md` stores persistent user context that survives across sessions and projects. It lives at the global instrument framework level (not inside any project) because it is shared across all instruments and all projects.
 
 ### 7.1 What to Persist
 
@@ -338,7 +340,7 @@ Capture any information the user shares that could be useful in future sessions:
 
 ### 7.2 When to Update
 
-Update `instruments/memory.md` during interaction when:
+Update `~/.claude/instruments/memory.md` during interaction when:
 - The user explicitly tells you a preference or convention.
 - The user provides a credential or token.
 - You discover a project convention by observing the codebase (ask before recording).
@@ -346,10 +348,10 @@ Update `instruments/memory.md` during interaction when:
 
 ### 7.3 Format
 
-Entries are organized by category and are append/update (never delete unless the user asks). See `instruments/memory.md` for the template structure.
+Entries are organized by category and are append/update (never delete unless the user asks). See the template structure in the file.
 
 ### 7.4 Usage
 
-- On every bootstrap (Section 1), read `instruments/memory.md` first.
+- On every bootstrap (Section 1), read `~/.claude/instruments/memory.md` first.
 - Apply stored preferences to all decisions (naming, formatting, tool choices, etc.).
-- When in doubt about a preference, check `instruments/memory.md` before asking the user.
+- When in doubt about a preference, check `~/.claude/instruments/memory.md` before asking the user.

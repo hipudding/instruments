@@ -4,9 +4,10 @@ A modular collection of agent protocols. Each instrument defines a specialized w
 
 ## How It Works
 
-1. On session start, the global `~/.claude/CLAUDE.md` directs the agent to read this file.
+1. On session start, the global `~/.claude/CLAUDE.md` directs the agent to read this file from `~/.claude/instruments/README.md`.
 2. The agent checks which instrument to activate based on user request or project context.
 3. Once activated, the agent reads the instrument's `PROTOCOL.md` and follows it.
+4. Runtime state (plans, tasks) is stored in `.tasks/` inside the current project — not in this directory.
 
 ## Available Instruments
 
@@ -22,9 +23,9 @@ A modular collection of agent protocols. Each instrument defines a specialized w
 
 ## Adding a New Instrument
 
-1. Create a new directory under `instruments/`: `instruments/{name}/`
+1. Create a new directory: `~/.claude/instruments/{name}/`
 2. Add a `PROTOCOL.md` defining the agent's behavior, phases, and conventions.
-3. Add any templates under `instruments/{name}/templates/`.
+3. Add any templates under `~/.claude/instruments/{name}/templates/`.
 4. Register the instrument in the table above.
 
 ## Conventions

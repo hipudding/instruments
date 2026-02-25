@@ -4,16 +4,13 @@ A modular protocol framework for [Claude Code](https://docs.anthropic.com/en/doc
 
 ## Quick Start
 
-### 1. Add to your project
+### 1. Install (one-time)
 
 ```bash
-# Clone into your project root
-cd your-project
-git clone git@github.com:hipudding/instruments.git
-
-# Or add as a submodule
-git submodule add git@github.com:hipudding/instruments.git
+git clone git@github.com:hipudding/instruments.git ~/.claude/instruments
 ```
+
+That's it. The instruments are now globally available to all projects.
 
 ### 2. Configure Claude Code
 
@@ -26,21 +23,21 @@ Add the following to `~/.claude/CLAUDE.md` (create the file if it doesn't exist)
 
 IMPORTANT: You MUST follow the steps below at the start of EVERY session, BEFORE responding to the user's first message.
 
-1. Check if `instruments/README.md` exists in the current project root.
+1. Check if `~/.claude/instruments/README.md` exists.
 2. If it exists:
-   a. Read `instruments/README.md` — discover available instruments.
-   b. Read `instruments/memory.md` if it exists — load persistent user preferences. Apply these preferences throughout the session.
+   a. Read `~/.claude/instruments/README.md` — discover available instruments.
+   b. Read `~/.claude/instruments/memory.md` if it exists — load persistent user preferences. Apply these preferences throughout the session.
    c. Determine which instrument to activate:
-      - If `.tasks/plan.md` exists → MUST activate the **Architect** instrument: read `instruments/architect/PROTOCOL.md` and enter Resume mode.
+      - If `.tasks/plan.md` exists → MUST activate the **Architect** instrument: read `~/.claude/instruments/architect/PROTOCOL.md` and enter Resume mode.
       - If the user explicitly requests a mode (e.g. "architect mode") → activate the corresponding instrument.
       - If the task contains multiple obviously independent work items (e.g. resolving conflicts in separate files, writing impl + tests) → consider activating the **Architect** instrument to decompose and parallel-dispatch.
       - Otherwise → proceed normally. The user can activate an instrument at any time.
-3. If `instruments/README.md` does not exist → proceed normally without instruments.
+3. If `~/.claude/instruments/README.md` does not exist → proceed normally without instruments.
 ```
 
 ### 3. Use it
 
-Start a Claude Code session in your project:
+Start a Claude Code session in any project:
 
 ```
 > architect mode, build a user authentication system
@@ -52,36 +49,34 @@ Start a Claude Code session in your project:
 # 4. Track progress, handle failures, verify results
 ```
 
-## Project Structure
+## How It Works
 
 ```
-instruments/
-  README.md                  # Agent entry point (instrument registry)
-  memory.md                  # Persistent user preferences (shared across instruments)
-  architect/                 # Architect instrument
-    PROTOCOL.md              #   Main protocol (decomposition, execution, evaluation)
-    DEVELOPER.md             #   Sub-agent protocol
-    templates/               #   Plan and task templates
-      plan.md
-      task.md
-```
+~/.claude/
+  CLAUDE.md                    # Global config (points to instruments)
+  instruments/                 # Installed once, available to all projects
+    README.md                  #   Instrument registry (agent entry point)
+    memory.md                  #   Persistent user preferences
+    architect/                 #   Architect instrument
+      PROTOCOL.md              #     Main protocol
+      DEVELOPER.md             #     Sub-agent protocol
+      templates/               #     Plan and task templates
+        plan.md
+        task.md
 
-Runtime state is stored in `.tasks/` at the project root (not inside `instruments/`):
-
-```
-.tasks/
-  plan.md                    # Current plan
-  plan-v1.md                 # Archived plan (created on re-plan)
-  v1-setup-auth/             # Task files for plan v1
-    01-init-db.md
-    02-create-models.md
-  v2-setup-auth/             # Task files for plan v2 (after re-plan)
-    03-add-oauth.md
+{any-project}/
+  .tasks/                      # Runtime state (per project, gitignore-able)
+    plan.md                    #   Current plan
+    plan-v1.md                 #   Archived plan (created on re-plan)
+    v1-setup-auth/             #   Task files for plan v1
+      01-init-db.md
+      02-create-models.md
 ```
 
 ## Framework Features
 
-- **Persistent memory** — The agent records your preferences, conventions, and environment details in `instruments/memory.md`, shared across all instruments, so it doesn't ask the same questions twice.
+- **Global install** — Install once in `~/.claude/instruments/`, use in any project. No per-project setup needed.
+- **Persistent memory** — The agent records your preferences, conventions, and environment details in `~/.claude/instruments/memory.md`, shared across all instruments and all projects.
 - **Extensible** — Add your own instruments by dropping a `PROTOCOL.md` into a new directory and registering it.
 
 ## Instruments
@@ -98,10 +93,16 @@ Structured mode for complex, multi-step projects. Say `architect mode` or let th
 
 ## Adding a New Instrument
 
-1. Create `instruments/{name}/PROTOCOL.md`
-2. Register it in `instruments/README.md`
+1. Create `~/.claude/instruments/{name}/PROTOCOL.md`
+2. Register it in `~/.claude/instruments/README.md`
 
-See `instruments/architect/` for a complete example.
+See `architect/` for a complete example.
+
+## Updating
+
+```bash
+cd ~/.claude/instruments && git pull
+```
 
 ## License
 
